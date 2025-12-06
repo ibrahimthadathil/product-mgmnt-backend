@@ -1,6 +1,6 @@
 import { Iuser } from "@/models/userModal";
 import { UserRepository } from "@/repository/implimentation/user-Repository";
-import { hashPassword } from "@/utils/hash_utils";
+import { comparePassword, hashPassword } from "@/utils/hash_utils";
 import { Service } from "typedi";
 
 @Service()
@@ -27,9 +27,13 @@ export class AuthService {
 
     async userSignIn(data:{email:string,password:string}){
         try {
-            
+            const existUser = await this.userRepository.findUserByEmail(data.email)
+            if(!existUser) return {success:false,message:'Not registered'}
+            const passwordCheck = await comparePassword(data.password,existUser.password)
+            if(passwordCheck) return {success:true,message:'Logged In successfully'}
+            else return { success: false, message:'Invalid credentials'}
         } catch (error) {
-            
+            throw new Error('failed to Sign In')
         }
     }
 

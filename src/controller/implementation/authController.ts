@@ -10,8 +10,10 @@ export class AuthController implements IAuthController {
 
   async SignIn(req: Request, res: Response): Promise<void> {
     try {
-      // const userData = req.body
-      // const {} = await this.authService.userSignIn(userData)
+      const userData = req.body
+      const {success,message} = await this.authService.userSignIn(userData)
+      if(success) res.status(HttpStatus.OK).json({message,success})
+        else res.status(HttpStatus.BAD_REQUEST).json({message,success})
     } catch (error) {
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         response: responseMessage.ERROR_MESSAGE,
