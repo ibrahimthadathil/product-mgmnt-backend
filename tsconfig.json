@@ -6,7 +6,7 @@
     "target": "ES6",
     "module": "CommonJS",
 
-    "baseUrl": "./src",
+    "baseUrl": "src",
     "paths": {
       "@/*": ["*"]
     },
@@ -18,6 +18,8 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
 
     "strict": true,
     "jsx": "react-jsx",

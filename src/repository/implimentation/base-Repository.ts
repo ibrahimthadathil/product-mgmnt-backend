@@ -3,7 +3,7 @@ import { Service } from "typedi";
 import { IBaseRepository } from "@/repository/interface/base_interface";
 
 @Service()
-export abstract class BasRepository <T extends Document>implements IBaseRepository<T>{
+export abstract class BaseRepository <T extends Document>implements IBaseRepository<T>{
 
     private model : Model<T>
 
