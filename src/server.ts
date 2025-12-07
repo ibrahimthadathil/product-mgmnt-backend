@@ -6,6 +6,7 @@ import connectDB from "./config/DB_config";
 import authRoute from "./routes/user/auth-route";
 import { productRoute } from "./routes/product/product-route";
 import cartRoute from "./routes/cart/cart-route";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 connectDB();
@@ -13,6 +14,7 @@ connectDB();
 const app: Application = express();
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/auth/", authRoute);
 app.use("/api/", productRoute);
