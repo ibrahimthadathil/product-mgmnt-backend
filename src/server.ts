@@ -10,9 +10,14 @@ import cookieParser from "cookie-parser";
 
 dotenv.config();
 connectDB();
+const target = {
+  origin: process.env.FRONTEND_URL,
+  changeOrigin: true,
+  credentials: true,
+};
 
 const app: Application = express();
-app.use(cors());
+app.use(cors(target));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -20,9 +25,6 @@ app.use("/api/auth/", authRoute);
 app.use("/api/", productRoute);
 app.use("/api/", cartRoute);
 
-app.get("/", (req: Request, res: Response) => {
-  res.status(200).json({ message: "API working 🚀" });
-});
 
 const PORT = process.env.PORT || 5000;
 
