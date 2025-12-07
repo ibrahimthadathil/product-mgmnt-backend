@@ -1,5 +1,6 @@
 import "reflect-metadata";
-import express, { Application, Request, Response } from "express";
+import 'dotenv/config'
+import express, { Application } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/DB_config";
@@ -25,8 +26,8 @@ app.use("/api/auth/", authRoute);
 app.use("/api/", productRoute);
 app.use("/api/", cartRoute);
 
-
 const PORT = process.env.PORT || 5000;
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port  http://localhost:${PORT}`);

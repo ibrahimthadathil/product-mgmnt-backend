@@ -51,10 +51,22 @@ export class s3Service  {
           };
 
           const command = new PutObjectCommand(params);
-          await this.s3Service.send(command)
+          await this.s3Service.send(command);
+
+          // const getObjectCommand = new GetObjectCommand({
+          //   Bucket: process.env.BUCKET_NAME,
+          //   Key: params.Key,
+          // });
+
+          // const presignedUrl = await getSignedUrl(
+          //   this.s3Service,
+          //   getObjectCommand,
+          //   { expiresIn: 604800 }
+          // );
+
           return {
             success: true,
-            Location: `https://${process.env.BUCKET_NAME}.s3.${process.env.BUCKET_REGION}.amazonaws.com/${params.Key}`,
+            Location: `https://${process.env.BUCKET_NAME}.s3.${process.env.AWS_REGION||"eu-north-1"}.amazonaws.com/${params.Key}`,
           };
         })
       );
@@ -65,8 +77,8 @@ export class s3Service  {
   }
   async delete_File(files: string[]) {
     try {
-      for (let url of files) {
-        let key = url.split(".com/")[1];
+      for (const url of files) {
+        const key = url.split(".com/")[1];
         const params = {
           Bucket: process.env.BUCKET_NAME,
           Key: key,
@@ -74,7 +86,8 @@ export class s3Service  {
         const command = new DeleteObjectCommand(params);
         try {
           await this.s3Service.send(command);
-        } catch (sendError) {
+        } catch (error) {
+      
           throw new Error("Faield to delete");
         }
       }
