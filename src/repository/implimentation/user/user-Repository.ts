@@ -1,4 +1,4 @@
-import { Iuser, User } from "@/models/userModal";
+import { Iuser, User } from "@/models/userModel";
 import { BaseRepository } from "@/repository/implimentation/base-Repository";
 import { Service } from "typedi";
 

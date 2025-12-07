@@ -1,5 +1,5 @@
-import { Iuser } from "@/models/userModal";
-import { UserRepository } from "@/repository/implimentation/user-Repository";
+import { Iuser } from "@/models/userModel";
+import { UserRepository } from "@/repository/implimentation/user/user-Repository";
 import { comparePassword, hashPassword } from "@/utils/hash_utils";
 import { Service } from "typedi";
 

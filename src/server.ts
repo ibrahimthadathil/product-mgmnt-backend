@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/DB_config";
 import authRoute from "./routes/user/auth-route";
+import { productRoute } from "./routes/product/product-route";
 
 dotenv.config();
 connectDB();
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth/", authRoute);
+app.use("/api/", productRoute);
 
 // app.get("/", (req: Request, res: Response) => {
 //   res.status(200).json({ message: "API working 🚀" });
