@@ -17,7 +17,7 @@ export class s3Service  {
         accessKeyId: process.env.BUCKET_ACCESS_KEY || "",
         secretAccessKey: process.env.BUCKET_SECRET_KEY || "",
       },
-      region: process.env.BUCKET_REGION || "",
+      region: process.env.AWS_REGION || "eu-north-1",
       requestHandler: new NodeHttpHandler({
         connectionTimeout: 300000, // Set connection timeout (5 minutes)
         socketTimeout: 300000, // Set socket timeout (5 minutes)

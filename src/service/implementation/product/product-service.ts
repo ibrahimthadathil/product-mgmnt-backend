@@ -25,4 +25,12 @@ export class ProductService {
         }
     }
 
+    async updateProduct(postId:string,data:Partial<Iproduct>,images?:Express.Multer.File[]){
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
+
 }

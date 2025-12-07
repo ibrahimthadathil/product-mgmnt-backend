@@ -1,0 +1,28 @@
+import { HttpStatus, responseMessage } from "@/enums/http_status_code";
+import { CartService } from "@/service/implementation/cart/cart-service";
+import { AuthRequest } from "@/types/api";
+import { Request, Response } from "express";
+import Container, { Service } from "typedi";
+
+@Service()
+export class CartController {
+  constructor(private cartservice: CartService) {}
+  async addItemToCart(req: AuthRequest, res: Response) {
+    try {
+      const newCart = req.body;
+      const { message, success } = await this.cartservice.addToCart(
+        req.user as string,
+        newCart
+      );
+      if (success) res.status(HttpStatus.CREATED).json({ message, success });
+      else res.status(HttpStatus.BAD_REQUEST).json({ message, success });
+    } catch (error) {
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        response: responseMessage.ERROR_MESSAGE,
+        error: (error as Error).message,
+      });
+    }
+  }
+}
+
+export const cart_controller = Container.get(CartController);

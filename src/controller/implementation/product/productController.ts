@@ -9,8 +9,9 @@ export class ProductController {
   constructor(private product_service: ProductService) {}
   async addProduct(req: Request, res: Response) {
     try {
-      const images = req.files as Express.Multer.File[];
+      const images = req.files as Express.Multer.File[]
       const productData = req.body;
+      
       const { message, success } = await this.product_service.addNewProduct(
         images,
         productData,
@@ -21,6 +22,19 @@ export class ProductController {
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ message: responseMessage.ERROR_MESSAGE });
+    }
+  }
+
+  async editProduct (req:Request,res:Response){
+     try {
+      const postId = req.params.id
+      const newImage = req.files as Express.Multer.File[]
+      const data = req.body
+    //  const {message,success}= await this.product_service.updateProduct(postId,data,newImage)
+    //  if(success)res.status(HttpStatus.OK).json({message,success})
+    //  else res.status(HttpStatus.UNAUTHORIZED).json({message,success})
+    } catch (error) {
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: responseMessage.ERROR_MESSAGE })
     }
   }
 
