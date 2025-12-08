@@ -7,9 +7,30 @@ import Container, { Service } from "typedi";
 @Service()
 export class CartController {
   constructor(private cartservice: CartService) {}
+  async getCartByUser(req: AuthRequest, res: Response) {
+    try {
+      if (req.user) {
+        const {data,success} = await this.cartservice.getAllCart(req.user.id)
+        console.log('🚛',JSON.stringify(data));
+        
+        if(success) res.status(HttpStatus.OK).json({success,data})
+          else throw new Error(responseMessage.NOT_FOUND)
+      } else
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          message: responseMessage.TOKEN_ACCESS,
+          success: false,
+        });
+    } catch (error) {
+      console.log((error as Error).message);
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        response: responseMessage.ERROR_MESSAGE,
+        error: (error as Error).message,
+      });
+    }
+  }
+
   async addItemToCart(req: AuthRequest, res: Response) {
     try {
-      
       if (req.user) {
         const newCart = req.body;
         const { message, success } = await this.cartservice.addToCart(
@@ -59,8 +80,11 @@ export class CartController {
   async deleteCart(req: AuthRequest, res: Response) {
     try {
       if (req.user) {
-        const cartId = req.params.id as string;
-        const { message, success } = await this.cartservice.deleteCart(cartId);
+        const productId = req.params.id as string;
+        const { message, success } = await this.cartservice.deleteCart(
+          req.user.id,
+          productId
+        );
         if (success) res.status(HttpStatus.OK).json({ message, success });
         else res.status(HttpStatus.BAD_REQUEST).json({ message, success });
       } else

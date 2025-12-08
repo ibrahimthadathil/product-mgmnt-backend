@@ -10,7 +10,7 @@ export class CartRepository extends BaseRepository<ICart> {
 
   async findByUser(userID: string) {
     try {
-      return await Cart.findOne({ user: userID });
+      return await Cart.findOne({ user: userID }).populate('items.product')
     } catch (error) {
       throw error;
     }
@@ -41,6 +41,20 @@ export class CartRepository extends BaseRepository<ICart> {
         return await Cart.findOne({user:userId},{items:{$elemMatch:{product:productId}}})
     } catch (error) {
         throw error
+    }
+  }
+
+  async removeProductFromCart(userId: string, productId: string) {
+    try {
+      const updatedCart = await Cart.findOneAndUpdate(
+        { user: userId },
+        { $pull: { items: { product: productId } } },
+        { new: true }
+      )
+      
+      return updatedCart;
+    } catch (error) {
+      throw error;
     }
   }
 

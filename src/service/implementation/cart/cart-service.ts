@@ -5,14 +5,21 @@ import { Service } from "typedi";
 @Service()
 export class CartService {
   constructor(private cartRepo: CartRepository) {}
-
+  async getAllCart(userId:string){
+    try {
+      const data = await this.cartRepo.findByUser(userId)
+       return {success:true,data:data ?? []}
+    } catch (error) {
+      throw error
+    }
+  }
   async addToCart(userId: string, data: ICart) {
     try {
       const checkCart = await this.cartRepo.cartItemMatch(
         userId,
         data?.items[0]?.product as string
       );
-      if (checkCart) return { success: true, message: "Already added" };
+      if (checkCart?.items?.length) return { success: true, message: "Already added" };
       const result = await this.cartRepo.addItemToCart(userId, data);
       if (result) return { success: true, message: "Added to Cart" };
       else return { success: false, message: "Failed to add cart" };
@@ -33,11 +40,16 @@ export class CartService {
     }
   }
 
-  async deleteCart(cartId: string) {
+  async deleteCart(userId: string, productId: string) {
     try {
-      const result = await this.cartRepo.delete(cartId);
-      if (result) return { success: true, message: "Cart deleted" };
-      else return { success: false, message: "Failed to delete cart" };
+      // Check if product exists in cart
+      const cartItem = await this.cartRepo.cartItemMatch(userId, productId);
+      if (!cartItem) {
+        return { success: false, message: "Product not found in cart" };
+      }
+      const result = await this.cartRepo.removeProductFromCart(userId, productId);
+      if (result) return { success: true, message: "Product removed from cart" };
+      else return { success: false, message: "Failed to remove product from cart" };
     } catch (error) {
       throw error;
     }
