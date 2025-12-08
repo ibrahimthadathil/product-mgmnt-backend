@@ -9,16 +9,13 @@ export const authMiddleware = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Extract token from Authorization header or cookies
     let token: string | undefined;
 
-    // Check Authorization header first (Bearer token)
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith("Bearer ")) {
       token = authHeader.substring(7);
     }
 
-    // If no token in header, check cookies (for refresh token scenarios)
     if (!token && req.cookies?.rftn) {
       token = req.cookies.rftn;
     }
@@ -31,12 +28,13 @@ export const authMiddleware = async (
       return;
     }
 
-    // Verify token using JWT service
     const tokenServiceInstance = Container.get(tokenService);
     const decoded = tokenServiceInstance.verify_Token(token);
 
-    // Check if token is valid
-    if (!decoded || (typeof decoded === "object" && "success" in decoded && !decoded.success)) {
+    if (
+      !decoded ||
+      (typeof decoded === "object" && "success" in decoded && !decoded.success)
+    ) {
       res.status(HttpStatus.UNAUTHORIZED).json({
         success: false,
         message: "Invalid or expired token",
@@ -44,7 +42,6 @@ export const authMiddleware = async (
       return;
     }
 
-    // Check if decoded has required properties
     if (typeof decoded !== "object" || !decoded.id || !decoded.email) {
       res.status(HttpStatus.UNAUTHORIZED).json({
         success: false,
@@ -53,7 +50,6 @@ export const authMiddleware = async (
       return;
     }
 
-    // Attach user data to request object
     req.user = {
       id: decoded.id as string,
       email: decoded.email as string,
@@ -70,4 +66,3 @@ export const authMiddleware = async (
     });
   }
 };
-

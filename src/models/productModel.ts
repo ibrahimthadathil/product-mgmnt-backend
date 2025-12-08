@@ -1,7 +1,6 @@
 import mongoose ,{Schema,Document}from "mongoose";
 
 export interface Iproduct extends Document{
-    // _id?:string,
     images:string[],
     description:string,
     name:string,

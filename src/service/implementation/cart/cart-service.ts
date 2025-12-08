@@ -43,7 +43,6 @@ export class CartService {
 
   async deleteCart(userId: string, productId: string) {
     try {
-      // Check if product exists in cart
       const cartItem = await this.cartRepo.cartItemMatch(userId, productId);
       if (!cartItem) {
         return { success: false, message: "Product not found in cart" };

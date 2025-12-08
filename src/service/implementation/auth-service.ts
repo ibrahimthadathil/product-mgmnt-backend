@@ -24,9 +24,11 @@ export class AuthService {
           id: addUser.id,
           email: addUser.email,
           role: addUser.role || "user",
+          userName:addUser.userName||""
         });
         const refreshToken = this.tokenService.generate_RefreshToken({
           id: addUser.id,
+          userName:addUser?.userName||"",
           email: addUser.email,
           role: addUser.role || "user",
         });
@@ -54,10 +56,12 @@ export class AuthService {
         const accessToken = this.tokenService.generate_AccessToken({
           id: existUser.id,
           email: existUser.email,
+          username:existUser.userName,
           role: existUser.role || "user",
         });
         const refreshToken = this.tokenService.generate_RefreshToken({
           id: existUser.id,
+          username:existUser.userName,
           email: existUser.email,
           role: existUser.role || "user",
         });
