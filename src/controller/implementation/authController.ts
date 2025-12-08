@@ -29,7 +29,6 @@ export class AuthController implements IAuthController {
   async Signup(req: Request, res: Response): Promise<void> {
     try {
       const userData = req.body;
-      console.log(userData);
       const { success, message, accessToken, refreshToken } =
         await this.authService.userSignUp(userData);
       if (success) {
@@ -39,7 +38,6 @@ export class AuthController implements IAuthController {
         res.status(HttpStatus.SERVICE_UNAVAILABLE).json({ message, success });
     } catch (error) {
       console.log("@", error);
-
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         response: responseMessage.ERROR_MESSAGE,
         error: (error as Error).message,

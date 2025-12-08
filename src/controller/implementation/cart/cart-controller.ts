@@ -9,13 +9,18 @@ export class CartController {
   constructor(private cartservice: CartService) {}
   async addItemToCart(req: AuthRequest, res: Response) {
     try {
-      const newCart = req.body;
-      const { message, success } = await this.cartservice.addToCart(
-        req.user as string,
-        newCart
-      );
-      if (success) res.status(HttpStatus.CREATED).json({ message, success });
-      else res.status(HttpStatus.BAD_REQUEST).json({ message, success });
+      if(req.user){
+        const newCart = req.body;
+        const { message, success } = await this.cartservice.addToCart(
+          req.user.id,
+          newCart
+        );
+        if (success) res.status(HttpStatus.CREATED).json({ message, success });
+        else res.status(HttpStatus.BAD_REQUEST).json({ message, success });
+      } else  res.status(HttpStatus.UNAUTHORIZED).json({ 
+        message: responseMessage.TOKEN_ACCESS, 
+        success: false 
+      });
     } catch (error) {
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         response: responseMessage.ERROR_MESSAGE,
