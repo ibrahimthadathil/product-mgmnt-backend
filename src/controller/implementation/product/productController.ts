@@ -57,7 +57,18 @@ export class ProductController {
         .json({ message: responseMessage.ERROR_MESSAGE });
     }
   }
-
+  async viewProduct(req:Request,res:Response){
+    try {
+      const productId = req.params.id as string
+     const {success,data,message} = await this.product_service.getFullViewProduct(productId)
+     if(success) res.status(HttpStatus.OK).json({success,data})
+      else res.status(HttpStatus.NOT_FOUND).json({success,message})
+    } catch (error) {
+       res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: responseMessage.ERROR_MESSAGE });
+    }
+  }
   async deleteProduct (req:Request,res:Response){
     try {
       const productId = req.params.id

@@ -139,4 +139,14 @@ export class ProductService {
       throw error;
     }
   }
+
+  async getFullViewProduct(productId:string){
+    try {
+      const result = await this.productRepository.findById(productId)
+      if(result) return {success:true,data:result}
+      else return {success:false,message:'Not found'}
+    } catch (error) {
+      throw error
+    }
+  }
 }

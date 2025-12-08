@@ -23,10 +23,12 @@ export class AuthService {
         const accessToken = this.tokenService.generate_AccessToken({
           id: addUser.id,
           email: addUser.email,
+          role: addUser.role || "user",
         });
         const refreshToken = this.tokenService.generate_RefreshToken({
           id: addUser.id,
           email: addUser.email,
+          role: addUser.role || "user",
         });
         return {
           success: true,
@@ -52,10 +54,12 @@ export class AuthService {
         const accessToken = this.tokenService.generate_AccessToken({
           id: existUser.id,
           email: existUser.email,
+          role: existUser.role || "user",
         });
         const refreshToken = this.tokenService.generate_RefreshToken({
           id: existUser.id,
           email: existUser.email,
+          role: existUser.role || "user",
         });
         return {
           success: true,
@@ -73,7 +77,11 @@ export class AuthService {
     try {
      const response = this.tokenService.verify_Token(token)
      if(typeof response === 'object' && response !== null && 'id' in response){
-      const newAccessToken = this.tokenService.generate_AccessToken({email:response.email,id:response.id})
+      const newAccessToken = this.tokenService.generate_AccessToken({
+        email: response.email,
+        id: response.id,
+        role: (response as any).role || "user"
+      })
       return {success:true,message:"new token created",accessToken:newAccessToken}
      }
     } catch (error) {
