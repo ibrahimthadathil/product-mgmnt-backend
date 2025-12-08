@@ -11,8 +11,12 @@ import cookieParser from "cookie-parser";
 
 dotenv.config();
 connectDB();
+
+const allowedOrigins = process.env.FRONTEND_URL;
+
 const target = {
-  origin: process.env.FRONTEND_URL,
+  origin: allowedOrigins ,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   changeOrigin: true,
   credentials: true,
 };
