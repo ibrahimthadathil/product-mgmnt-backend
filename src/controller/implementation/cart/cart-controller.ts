@@ -1,4 +1,5 @@
 import { HttpStatus, responseMessage } from "@/enums/http_status_code";
+import { ICart } from "@/models/cartModal";
 import { CartService } from "@/service/implementation/cart/cart-service";
 import { AuthRequest } from "@/types/api";
 import { Request, Response } from "express";
@@ -10,9 +11,7 @@ export class CartController {
   async getCartByUser(req: AuthRequest, res: Response) {
     try {
       if (req.user) {
-        const {data,success} = await this.cartservice.getAllCart(req.user.id)
-        console.log('🚛',JSON.stringify(data));
-        
+        const {data,success} = await this.cartservice.getAllCart(req.user.id)        
         if(success) res.status(HttpStatus.OK).json({success,data})
           else throw new Error(responseMessage.NOT_FOUND)
       } else
@@ -58,9 +57,10 @@ export class CartController {
       if (req.user) {
         const cartId = req.params.id as string;
         const updateData = req.body;
+        const payload = {items:[{product:updateData.cartId as string,quantity:updateData.quantity as number}]}
         const { message, success } = await this.cartservice.updateCart(
-          cartId,
-          updateData
+          req.user.id,
+          payload as ICart,
         );
         if (success) res.status(HttpStatus.OK).json({ message, success });
         else res.status(HttpStatus.BAD_REQUEST).json({ message, success });

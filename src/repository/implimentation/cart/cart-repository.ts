@@ -19,7 +19,7 @@ export class CartRepository extends BaseRepository<ICart> {
   async addItemToCart(
     userId: string,
     newCart:ICart
-  ) {
+  ) {    
     const cart = await Cart.findOneAndUpdate(
       { user: userId },
       {
@@ -31,9 +31,29 @@ export class CartRepository extends BaseRepository<ICart> {
         },
       },
       { new: true, upsert: true }
-    ).populate("items.product");
-
+    ).populate("items.product");    
     return cart;
+  }
+
+  async updateQuantity(userId: string,
+    newCart:ICart){
+    try {
+      const cart = await Cart.findOneAndUpdate(
+    {
+      user: userId,
+      "items.product": newCart?.items[0].product,
+    },
+    {
+      $set: {
+        "items.$.quantity": newCart?.items[0].quantity || 1,
+      },
+    },
+    { new: true }
+  )
+  return true
+    } catch (error) {
+      throw error
+    }
   }
 
   async cartItemMatch (userId:string,productId:string){

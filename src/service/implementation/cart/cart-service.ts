@@ -13,14 +13,15 @@ export class CartService {
       throw error
     }
   }
-  async addToCart(userId: string, data: ICart) {
+  async addToCart(userId: string, data: Omit<ICart,"_id"|"user">,isUpdate:boolean=false) {
+    
     try {
       const checkCart = await this.cartRepo.cartItemMatch(
         userId,
-        data?.items[0]?.product as string
+        (data as ICart)?.items[0]?.product as string
       );
-      if (checkCart?.items?.length) return { success: true, message: "Already added" };
-      const result = await this.cartRepo.addItemToCart(userId, data);
+      if (checkCart?.items?.length&&!isUpdate) return { success: true, message: "Already added" };
+      const result = await this.cartRepo.addItemToCart(userId, data as ICart);
       if (result) return { success: true, message: "Added to Cart" };
       else return { success: false, message: "Failed to add cart" };
     } catch (error) {
@@ -30,9 +31,9 @@ export class CartService {
     }
   }
 
-  async updateCart(cartId: string, data: Partial<ICart>) {
+  async updateCart(userId: string, data: Partial<ICart>) {
     try {
-      const result = await this.cartRepo.update(cartId, data);
+      const result = await this.cartRepo.updateQuantity(userId, data as ICart);
       if (result) return { success: true, message: "Cart updated" };
       else return { success: false, message: "Failed to update cart" };
     } catch (error) {
