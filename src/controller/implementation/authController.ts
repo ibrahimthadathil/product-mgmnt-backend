@@ -48,7 +48,7 @@ export class AuthController implements IAuthController {
    async setNewToken(req:Request,res:Response){
     const token=req.cookies?.rftn;
     if(!token){
-        res.status(HttpStatus.FORBIDDEN).json({message:responseMessage.ERROR_MESSAGE})
+       return res.status(HttpStatus.FORBIDDEN).json({message:responseMessage.ERROR_MESSAGE})
     }
     try {      
       const response= await this.authService.checkToken(token)
