@@ -8,6 +8,7 @@ import authRoute from "./routes/user/auth-route";
 import { productRoute } from "./routes/product/product-route";
 import cartRoute from "./routes/cart/cart-route";
 import cookieParser from "cookie-parser";
+import initAdmin from "./script/init-admin";
 dotenv.config();
 connectDB();
 
@@ -46,5 +47,6 @@ const PORT = process.env.PORT || 5000;
 
 
 app.listen(PORT, () => {
+    initAdmin()
   console.log(`Server running on port  http://localhost:${PORT}`);
 });
