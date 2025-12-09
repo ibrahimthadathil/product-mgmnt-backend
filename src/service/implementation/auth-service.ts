@@ -13,6 +13,8 @@ export class AuthService {
   ) {}
 
   async userSignUp(data: Iuser) {
+    console.log(data,'💕💕');
+    
     try {
       const existUser = await this.userRepository.findUserByEmail(data?.email);
       if (existUser) return { message: "User Already exist" };
