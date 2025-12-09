@@ -15,14 +15,9 @@ connectDB();
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://product-mgmnt-frontend-ixb4.vercel.app",
+  "https://product-mgmnt-frontend.vercel.app",
 ];
-const target = {
-  origin: allowedOrigins ,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-  changeOrigin: true,
-  credentials: true,
-};
+
 
 const app: Application = express();
 
