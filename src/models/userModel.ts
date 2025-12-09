@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface Iuser extends Document {
-  userName: string;
+  username: string;
   email: string;
   password: string;
   role?: "admin" | "user";
@@ -12,7 +12,7 @@ const userSchema = new Schema(
   {
     email: { type: String, required: true, unique: true },
     password: { type: String },
-    userName: { type: String, required: true },
+    username: { type: String, required: true },
     role: {
       type: String,
       enum: ["admin", "user"],

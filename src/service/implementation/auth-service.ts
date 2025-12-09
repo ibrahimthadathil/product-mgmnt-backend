@@ -19,24 +19,22 @@ export class AuthService {
       const hashedPassword = await hashPassword(data.password);
       data.password = hashedPassword;
       const addUser = await this.userRepository.create(data);
-      if (addUser) {
+    if (addUser) {
         const accessToken = this.tokenService.generate_AccessToken({
           id: addUser.id,
           email: addUser.email,
           role: addUser.role || "user",
-          userName:addUser.userName||""
-        });
-        const refreshToken = this.tokenService.generate_RefreshToken({
-          id: addUser.id,
-          userName:addUser?.userName||"",
-          email: addUser.email,
-          role: addUser.role || "user",
+          username: addUser.username || "",
         });
         return {
           success: true,
           message: "User Created",
+          user: {
+            name: addUser.username,
+            email: addUser.email,
+            role: addUser.role,
+          },
           accessToken,
-          refreshToken,
         };
       } else return { success: false, message: "failed to create" };
     } catch (error) {
@@ -56,20 +54,19 @@ export class AuthService {
         const accessToken = this.tokenService.generate_AccessToken({
           id: existUser.id,
           email: existUser.email,
-          username:existUser.userName,
+          username: existUser.username,
           role: existUser.role || "user",
         });
-        const refreshToken = this.tokenService.generate_RefreshToken({
-          id: existUser.id,
-          username:existUser.userName,
-          email: existUser.email,
-          role: existUser.role || "user",
-        });
+        
         return {
           success: true,
           message: "Logged In successfully",
           accessToken,
-          refreshToken,
+          user: {
+            name: existUser.username,
+            email: existUser.email,
+            role: existUser.role,
+          },
         };
       } else return { success: false, message: "Invalid credentials" };
     } catch (error) {
@@ -77,22 +74,33 @@ export class AuthService {
     }
   }
 
-  async checkToken(token:string){
+  async checkToken(token: string) {
     try {
-     const response = this.tokenService.verify_Token(token)
-     if(typeof response === 'object' && response !== null && 'id' in response){
-      const newAccessToken = this.tokenService.generate_AccessToken({
-        email: response.email,
-        id: response.id,
-        role: (response as any).role || "user"
-      })
-      return {success:true,message:"new token created",accessToken:newAccessToken}
-     }
+      const response = this.tokenService.verify_Token(token);
+      if (
+        typeof response === "object" &&
+        response !== null &&
+        "id" in response
+      ) {
+        const newAccessToken = this.tokenService.generate_AccessToken({
+          email: response.email,
+          id: response.id,
+          role: (response as any).role || "user",
+        });
+        return {
+          success: true,
+          message: "new token created",
+          accessToken: newAccessToken,
+        };
+      }
     } catch (error) {
       if (error instanceof JsonWebTokenError) {
-        return {success:false,message:"Refresh token expired, please log in again"}
-     }
-     console.error("Error verifying refresh token:", error);
+        return {
+          success: false,
+          message: "Refresh token expired, please log in again",
+        };
+      }
+      console.error("Error verifying refresh token:", error);
     }
   }
 }

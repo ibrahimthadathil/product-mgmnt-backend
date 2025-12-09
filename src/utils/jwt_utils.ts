@@ -15,8 +15,3 @@ export const verifyToken = (token: string) => {
   }
 };
 
-export const generateRefreshToken = <T>(data: Partial<T>): string => {
-  let secretKey = process.env.JWT_KEY as string;
-
-  return jwt.sign(data, secretKey, { expiresIn: "7d" });
-};
