@@ -13,15 +13,13 @@ export class AuthService {
   ) {}
 
   async userSignUp(data: Iuser) {
-    console.log(data,'💕💕');
-    
     try {
       const existUser = await this.userRepository.findUserByEmail(data?.email);
       if (existUser) return { message: "User Already exist" };
       const hashedPassword = await hashPassword(data.password);
       data.password = hashedPassword;
       const addUser = await this.userRepository.create(data);
-    if (addUser) {
+      if (addUser) {
         const accessToken = this.tokenService.generate_AccessToken({
           id: addUser.id,
           email: addUser.email,
@@ -40,8 +38,7 @@ export class AuthService {
         };
       } else return { success: false, message: "failed to create" };
     } catch (error) {
-      console.log(error,'🚛');
-      
+      console.log((error as Error).message);
       throw new Error("Failed to SignUp");
     }
   }
@@ -61,7 +58,7 @@ export class AuthService {
           username: existUser.username,
           role: existUser.role || "user",
         });
-        
+
         return {
           success: true,
           message: "Logged In successfully",
@@ -74,6 +71,7 @@ export class AuthService {
         };
       } else return { success: false, message: "Invalid credentials" };
     } catch (error) {
+      console.log((error as Error).message);
       throw new Error("failed to Sign In");
     }
   }
@@ -98,6 +96,7 @@ export class AuthService {
         };
       }
     } catch (error) {
+      console.log((error as Error).message);
       if (error instanceof JsonWebTokenError) {
         return {
           success: false,

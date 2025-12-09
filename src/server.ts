@@ -8,8 +8,6 @@ import authRoute from "./routes/user/auth-route";
 import { productRoute } from "./routes/product/product-route";
 import cartRoute from "./routes/cart/cart-route";
 import cookieParser from "cookie-parser";
-import initAdmin from "./script/init-admin";
-
 dotenv.config();
 connectDB();
 
@@ -37,7 +35,6 @@ app.use(
         allowedHeaders: ["Content-Type", "Authorization"],
     })
 );
-// app.use(cors(target));
 app.use(express.json());
 app.use(cookieParser());
 

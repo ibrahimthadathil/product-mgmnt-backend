@@ -34,6 +34,7 @@ export class ProductService {
       if (result) return { success: true, data: result };
       else return { success: false, message: "Failed to fetch" };
     } catch (error) {
+      console.log((error as Error).message);
       throw error;
     }
   }
@@ -82,6 +83,7 @@ export class ProductService {
             }
           });
         } else {
+          
           throw new Error("Failed to upload images, try later");
         }
       }
@@ -136,6 +138,7 @@ export class ProductService {
         else throw new Error("Bad Request");
       } else throw new Error("Bad request");
     } catch (error) {
+      console.log((error as Error).message);
       throw error;
     }
   }
@@ -146,6 +149,7 @@ export class ProductService {
       if(result) return {success:true,data:result}
       else return {success:false,message:'Not found'}
     } catch (error) {
+      console.log((error as Error).message);
       throw error
     }
   }

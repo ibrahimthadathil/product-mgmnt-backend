@@ -12,6 +12,7 @@ export class UserRepository extends BaseRepository<Iuser> {
     try {
       return await User.findOne({ email });
     } catch (error) {
+      console.log((error as Error).message);
       throw new Error("caught error from exist user check");
     }
   }

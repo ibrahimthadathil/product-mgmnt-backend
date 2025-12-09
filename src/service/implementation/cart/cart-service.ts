@@ -10,6 +10,7 @@ export class CartService {
       const data = await this.cartRepo.findByUser(userId)
        return {success:true,data:data ?? []}
     } catch (error) {
+      console.log((error as Error).message);
       throw error
     }
   }
@@ -37,6 +38,7 @@ export class CartService {
       if (result) return { success: true, message: "Cart updated" };
       else return { success: false, message: "Failed to update cart" };
     } catch (error) {
+      console.log((error as Error).message);
       throw error;
     }
   }
@@ -51,6 +53,7 @@ export class CartService {
       if (result) return { success: true, message: "Product removed from cart" };
       else return { success: false, message: "Failed to remove product from cart" };
     } catch (error) {
+      console.log((error as Error).message);
       throw error;
     }
   }

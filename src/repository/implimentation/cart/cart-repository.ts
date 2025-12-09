@@ -12,6 +12,7 @@ export class CartRepository extends BaseRepository<ICart> {
     try {
       return await Cart.findOne({ user: userID }).populate('items.product')
     } catch (error) {
+      console.log((error as Error).message);
       throw error;
     }
   }
@@ -20,19 +21,25 @@ export class CartRepository extends BaseRepository<ICart> {
     userId: string,
     newCart:ICart
   ) {    
-    const cart = await Cart.findOneAndUpdate(
-      { user: userId },
-      {
-        $addToSet: {
-          items: {
-            product: newCart?.items[0].product,
-            quantity: newCart?.items[0].quantity || 1,
+    try {
+      
+      const cart = await Cart.findOneAndUpdate(
+        { user: userId },
+        {
+          $addToSet: {
+            items: {
+              product: newCart?.items[0].product,
+              quantity: newCart?.items[0].quantity || 1,
+            },
           },
         },
-      },
-      { new: true, upsert: true }
-    ).populate("items.product");    
-    return cart;
+        { new: true, upsert: true }
+      ).populate("items.product");    
+      return cart;
+    } catch (error) {
+      console.log((error as Error).message);
+      throw error
+    }
   }
 
   async updateQuantity(userId: string,
@@ -52,6 +59,7 @@ export class CartRepository extends BaseRepository<ICart> {
   )
   return true
     } catch (error) {
+      console.log((error as Error).message);
       throw error
     }
   }
@@ -60,6 +68,7 @@ export class CartRepository extends BaseRepository<ICart> {
     try {
         return await Cart.findOne({user:userId},{items:{$elemMatch:{product:productId}}})
     } catch (error) {
+      console.log((error as Error).message);
         throw error
     }
   }
@@ -74,6 +83,7 @@ export class CartRepository extends BaseRepository<ICart> {
       
       return updatedCart;
     } catch (error) {
+      console.log((error as Error).message);
       throw error;
     }
   }

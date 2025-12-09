@@ -17,6 +17,7 @@ export class AuthController implements IAuthController {
         res.status(HttpStatus.OK).json({ message, success, accessToken,user });
       } else res.status(HttpStatus.BAD_REQUEST).json({ message, success });
     } catch (error) {
+      console.log((error as Error).message);
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         response: responseMessage.ERROR_MESSAGE,
         error: (error as Error).message,
@@ -35,7 +36,7 @@ export class AuthController implements IAuthController {
       } else
         res.status(HttpStatus.SERVICE_UNAVAILABLE).json({ message, success });
     } catch (error) {
-      console.log("@", error);
+      console.log((error as Error).message);
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         response: responseMessage.ERROR_MESSAGE,
         error: (error as Error).message,
@@ -45,7 +46,6 @@ export class AuthController implements IAuthController {
 
   async logoutUser(req: Request, res: Response) {
     try {
-      res.clearCookie("rftn");
       res.status(HttpStatus.OK).json({ message: "logged Out" });
     } catch (error) {
       console.log((error as Error).message);

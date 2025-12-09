@@ -8,7 +8,6 @@ export class ProductController {
   constructor(private product_service: ProductService) {}
   async addProduct(req: Request, res: Response) {
     try {
-      console.log(req.body, "🥲", req.files);
       const images = req.files as Express.Multer.File[];
       const productData = req.body;
 
@@ -19,6 +18,7 @@ export class ProductController {
       if (success) res.status(HttpStatus.CREATED).json({ message, success });
       else res.status(HttpStatus.BAD_REQUEST).json({ message, success });
     } catch (error) {
+      console.log((error as Error).message);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ message: responseMessage.ERROR_MESSAGE });
@@ -32,6 +32,7 @@ export class ProductController {
       if (success) res.status(HttpStatus.OK).json({ message, success, data });
       else res.status(HttpStatus.NOT_FOUND).json({ message, success });
     } catch (error) {
+      console.log((error as Error).message);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ message: responseMessage.ERROR_MESSAGE });
@@ -41,9 +42,7 @@ export class ProductController {
     try {
       const postId = req.params.id as string;
       const newImage = req.files as Express.Multer.File[];
-      const { id, ...data } = req.body; 
-      console.log(data);
-      
+      const { id, ...data } = req.body;       
       const { message, success } = await this.product_service.updateProduct(
         postId,
         data,
@@ -52,6 +51,7 @@ export class ProductController {
       if (success) res.status(HttpStatus.OK).json({ message, success });
       else res.status(HttpStatus.BAD_REQUEST).json({ message, success });
     } catch (error) {
+      console.log((error as Error).message);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ message: responseMessage.ERROR_MESSAGE });
@@ -64,6 +64,7 @@ export class ProductController {
      if(success) res.status(HttpStatus.OK).json({success,data})
       else res.status(HttpStatus.NOT_FOUND).json({success,message})
     } catch (error) {
+      console.log((error as Error).message);
        res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ message: responseMessage.ERROR_MESSAGE });
@@ -76,6 +77,7 @@ export class ProductController {
       if(success)res.status(HttpStatus.OK).json({success,message})
         else res.status(HttpStatus.BAD_REQUEST).json({success,message})
      } catch (error) {
+      console.log((error as Error).message);
        res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ message: responseMessage.ERROR_MESSAGE });

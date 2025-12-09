@@ -70,6 +70,7 @@ export class CartController {
           success: false,
         });
     } catch (error) {
+      console.log((error as Error).message);
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         response: responseMessage.ERROR_MESSAGE,
         error: (error as Error).message,
@@ -93,6 +94,7 @@ export class CartController {
           success: false,
         });
     } catch (error) {
+      console.log((error as Error).message);
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         response: responseMessage.ERROR_MESSAGE,
         error: (error as Error).message,
