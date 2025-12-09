@@ -38,6 +38,8 @@ export class AuthService {
         };
       } else return { success: false, message: "failed to create" };
     } catch (error) {
+      console.log(error,'🚛');
+      
       throw new Error("Failed to SignUp");
     }
   }
