@@ -47,6 +47,5 @@ const PORT = process.env.PORT || 5000;
 
 
 app.listen(PORT, () => {
-    initAdmin()
   console.log(`Server running on port  http://localhost:${PORT}`);
 });
